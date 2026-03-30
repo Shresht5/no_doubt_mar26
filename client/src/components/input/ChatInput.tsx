@@ -47,7 +47,7 @@ export default function ChatInput({ addMessage }: Props) {
             <form onSubmit={submit} className="px-3 p-2 border-0  rounded-3xl  bg-[#282638]  flex items-center">
                 <textarea ref={inputarea}
                     className="p-1 outline-0 text-white flex-1 resize-none overflow-y-auto max-h-26  custom-scroll"
-                    name="input" value={value.inputText}
+                    value={value.inputText}
                     onChange={(e) => { handleChange(e); }}
                     onKeyDown={handleKeyDown}
                     placeholder="Type your message..." />

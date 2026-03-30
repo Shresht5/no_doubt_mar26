@@ -1,17 +1,18 @@
 'use client'
 import { InputState } from '@/types/inputSection';
+import { convertVideoToAudio } from '@/utils/MediaProcessing';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 export default function MainInput() {
 
+    const videoRef = useRef<HTMLVideoElement>(null);
     const router = useRouter();
-    const [value, setValue] = useState<InputState>({
-        URL: "",
-        inputText: "",
-        file: null,
-    });
 
+    const [progress, setProgress] = useState(0);
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [value, setValue] = useState<InputState>({ URL: "", inputText: "", file: null, });
     function submit() {
         //function
         router.push('/c/8454');
@@ -19,6 +20,7 @@ export default function MainInput() {
 
     return (
         <div>
+            <video ref={videoRef} style={{ display: 'none' }} />
             <h2>No_Doubt</h2>
 
             {/*URL*/}
@@ -38,15 +40,34 @@ export default function MainInput() {
             {/*file video*/}
             <input
                 type="file"
+                accept="video/*,audio/*"
                 onChange={(e) => setValue(prev => ({ ...prev, file: e.target.files?.[0] ?? null }))} />
             {value.file ? (
-                <video
-                    src={URL.createObjectURL(value.file)}
-                    controls
-                    width={300}
-                />
+                value.file.type.startsWith('video/') ? (
+                    <div>
+                        <video
+                            src={URL.createObjectURL(value.file)}
+                            controls
+                            width={200}
+                        />
+                        <button onClick={() => { convertVideoToAudio({ file: value.file!, videoRef, setProgress, setAudioUrl, setLoading }) }} disabled={!value.file || loading}>
+                            convert {loading ? `Converting... ${progress}%` : 'Extract Audio'}
+                        </button>
+                        {audioUrl && (
+                            <>
+                                <audio src={audioUrl} controls />
+                                <a href={audioUrl} download="audio.wav">Download</a>
+                            </>
+                        )}
+                    </div>
+                ) : (
+                    <audio
+                        src={URL.createObjectURL(value.file)}
+                        controls
+                    />
+                )
             ) : (
-                <p>No video selected</p>
+                <p>No video selecteds</p>
             )}
             <button onClick={submit}>submit</button>
         </div>
