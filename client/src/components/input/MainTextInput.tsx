@@ -18,7 +18,7 @@ export default function MainInput() {
         if (!value.file) return;
         const formData = new FormData();
         formData.append("file", value.file);
-        const res = await fetch("http://localhost:8000/upload_file", {
+        const res = await fetch("http://localhost:8000/extract", {
             method: "POST",
             body: formData
         });
