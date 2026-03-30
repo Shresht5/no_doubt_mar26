@@ -20,7 +20,7 @@ export const convertVideoToAudio: ConvertVideoToAudio = async ({ file, videoRef,
     const wavBlob = audioBufferToWav(audioBuffer);
     setProgress(90);
 
-    // Step 4 — store as blob URL ✅
+    // Step 4 — store as blob URL 
     const url = URL.createObjectURL(wavBlob);
     setAudioUrl(url);
     setProgress(100);
@@ -29,8 +29,8 @@ export const convertVideoToAudio: ConvertVideoToAudio = async ({ file, videoRef,
 
 // WAV encoder — no library needed
 function audioBufferToWav(buffer: AudioBuffer): Blob {
-    const numChannels = 1;                    // ✅ mono
-    const sampleRate = buffer.sampleRate;    // uses 16000 from AudioContext
+    const numChannels = 1;                    //  mono
+    const sampleRate = buffer.sampleRate;    // uses 8000 from AudioContext
     const length = buffer.length * numChannels * 2;
     const arrayBuffer = new ArrayBuffer(44 + length);
     const view = new DataView(arrayBuffer);
@@ -49,7 +49,6 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
     writeString(view, 36, 'data');
     view.setUint32(40, length, true);
 
-    // ✅ mix stereo → mono by averaging channels
     let offset = 44;
     for (let i = 0; i < buffer.length; i++) {
         let sample = 0;
@@ -61,9 +60,7 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
         view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
         offset += 2;
     }
-
     return new Blob([arrayBuffer], { type: 'audio/wav' });
-
 }
 
 function writeString(view: DataView, offset: number, str: string) {

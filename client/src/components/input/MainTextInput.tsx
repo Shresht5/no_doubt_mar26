@@ -3,6 +3,7 @@ import { InputState } from '@/types/inputSection';
 import { convertVideoToAudio } from '@/utils/MediaProcessing';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
+import FilePreview from '../section/FilePreview';
 
 export default function MainInput() {
 
@@ -13,9 +14,18 @@ export default function MainInput() {
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [value, setValue] = useState<InputState>({ URL: "", inputText: "", file: null, });
-    function submit() {
+    async function submit() {
+        if (!value.file) return;
+        const formData = new FormData();
+        formData.append("file", value.file);
+        const res = await fetch("http://localhost:8000/upload_file", {
+            method: "POST",
+            body: formData
+        });
+        const data = await res.json();
+        console.log(data);
         //function
-        router.push('/c/8454');
+        // router.push('/c/8454');
     }
 
     return (
@@ -40,35 +50,11 @@ export default function MainInput() {
             {/*file video*/}
             <input
                 type="file"
-                accept="video/*,audio/*"
+                accept="video/*,audio/*,image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
                 onChange={(e) => setValue(prev => ({ ...prev, file: e.target.files?.[0] ?? null }))} />
-            {value.file ? (
-                value.file.type.startsWith('video/') ? (
-                    <div>
-                        <video
-                            src={URL.createObjectURL(value.file)}
-                            controls
-                            width={200}
-                        />
-                        <button onClick={() => { convertVideoToAudio({ file: value.file!, videoRef, setProgress, setAudioUrl, setLoading }) }} disabled={!value.file || loading}>
-                            convert {loading ? `Converting... ${progress}%` : 'Extract Audio'}
-                        </button>
-                        {audioUrl && (
-                            <>
-                                <audio src={audioUrl} controls />
-                                <a href={audioUrl} download="audio.wav">Download</a>
-                            </>
-                        )}
-                    </div>
-                ) : (
-                    <audio
-                        src={URL.createObjectURL(value.file)}
-                        controls
-                    />
-                )
-            ) : (
-                <p>No video selecteds</p>
-            )}
+            {value.file ?
+                <FilePreview file={value.file} />
+                : (<p>No video selecteds</p>)}
             <button onClick={submit}>submit</button>
         </div>
     )
