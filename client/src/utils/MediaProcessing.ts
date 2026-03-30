@@ -12,7 +12,7 @@ export const convertVideoToAudio: ConvertVideoToAudio = async ({ file, videoRef,
     setProgress(20);
 
     // Step 2 — decode audio from video file
-    const audioContext = new AudioContext();
+    const audioContext = new AudioContext({ sampleRate: 8000 });
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
     setProgress(60);
 
@@ -29,38 +29,41 @@ export const convertVideoToAudio: ConvertVideoToAudio = async ({ file, videoRef,
 
 // WAV encoder — no library needed
 function audioBufferToWav(buffer: AudioBuffer): Blob {
-    const numChannels = buffer.numberOfChannels;
-    const sampleRate = buffer.sampleRate;
-    const length = buffer.length * numChannels * 2; // 16-bit = 2 bytes
+    const numChannels = 1;                    // ✅ mono
+    const sampleRate = buffer.sampleRate;    // uses 16000 from AudioContext
+    const length = buffer.length * numChannels * 2;
     const arrayBuffer = new ArrayBuffer(44 + length);
     const view = new DataView(arrayBuffer);
 
-    // WAV header
     writeString(view, 0, 'RIFF');
     view.setUint32(4, 36 + length, true);
     writeString(view, 8, 'WAVE');
     writeString(view, 12, 'fmt ');
     view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);                        // PCM format
+    view.setUint16(20, 1, true);
     view.setUint16(22, numChannels, true);
     view.setUint32(24, sampleRate, true);
     view.setUint32(28, sampleRate * numChannels * 2, true);
     view.setUint16(32, numChannels * 2, true);
-    view.setUint16(34, 16, true);                       // 16-bit
+    view.setUint16(34, 16, true);
     writeString(view, 36, 'data');
     view.setUint32(40, length, true);
 
-    // interleave channels
+    // ✅ mix stereo → mono by averaging channels
     let offset = 44;
     for (let i = 0; i < buffer.length; i++) {
-        for (let ch = 0; ch < numChannels; ch++) {
-            const sample = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
-            view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
-            offset += 2;
+        let sample = 0;
+        for (let ch = 0; ch < buffer.numberOfChannels; ch++) {
+            sample += buffer.getChannelData(ch)[i];
         }
+        sample = sample / buffer.numberOfChannels; // average channels
+        sample = Math.max(-1, Math.min(1, sample));
+        view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+        offset += 2;
     }
 
     return new Blob([arrayBuffer], { type: 'audio/wav' });
+
 }
 
 function writeString(view: DataView, offset: number, str: string) {
