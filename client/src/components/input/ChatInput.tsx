@@ -38,7 +38,7 @@ export default function ChatInput({ addMessage }: Props) {
     function submit(e: any) {
         e.preventDefault()
         if (!value.inputText.trim()) return;
-        addMessage('Person', value.inputText.trim());
+        addMessage(value.inputText.trim());
         setValue((prev) => ({ ...prev, inputText: "" }));
     }
 

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List, Literal
 from fastapi import FastAPI,UploadFile, HTTPException
 from pydantic import BaseModel
 from fastapi.concurrency import run_in_threadpool
@@ -34,13 +34,15 @@ async def extract_text(file: UploadFile):
         "text": text
     }
 
-class Item(BaseModel):  # //body
-    name:str
-    price:float
-    is_offer:Union[bool,None]=None
+class Message(BaseModel):
+    role: Literal["user", "assistant", "system"]
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: List[Message]
 
 @app.post("/aichat")
-async def ai_chat(req:Item):
+async def ai_chat(req:ChatRequest):
     return await AIChatApi(req)
 
 # @app.post("/upload_file")
