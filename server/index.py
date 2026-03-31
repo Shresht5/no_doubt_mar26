@@ -41,7 +41,7 @@ class Item(BaseModel):  # //body
 
 @app.post("/aichat")
 async def ai_chat(req:Item):
-    return AIChatApi(req)
+    return await AIChatApi(req)
 
 # @app.post("/upload_file")
 # async def upload_file(file: UploadFile = File(...)):
