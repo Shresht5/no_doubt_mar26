@@ -37,16 +37,16 @@ def download_video(url: str):
 
 
 
-# @router.get("/audiodow")
-# def download_video(url: str):
-#     ydl_opts = {
-#         "format": "worstaudio/worst",   
-#         "outtmpl": "downloads/%(title)s.%(ext)s",
-#         "quiet": True,
-#     }
+@router.get("/audiodow")
+def download_video(url: str):
+    ydl_opts = {
+        "format": "worstaudio/worst",   
+        "outtmpl": "downloads/%(title)s.%(ext)s",
+        "quiet": True,
+    }
 
-#     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-#         ydl.download([url])
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
 
-#     return {"status": "downloaded"}
+    return {"status": "downloaded"}
 
