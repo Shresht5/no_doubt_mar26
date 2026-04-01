@@ -6,6 +6,7 @@ from pptx import Presentation
 import openpyxl
 from bs4 import BeautifulSoup
 from faster_whisper import WhisperModel
+import tempfile, os
 
 
 def extract_pdf(data: bytes) -> str:
@@ -57,9 +58,7 @@ def extract_html(data: bytes) -> str:
 
 
 whisper_model = WhisperModel("tiny", device="cpu", compute_type="int8")
-def extract_audio(data: bytes) -> str:
-    import tempfile, os
-    suffix = ".wav"  # whisper works best with wav
+def extract_audio(data: bytes,suffix: str = ".webm") -> str:
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
         tmp.write(data)
         tmp_path = tmp.name

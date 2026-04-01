@@ -7,6 +7,7 @@ from src.utils.fileType import EXTRACTORS
 from src.service.api import AIChatApi
 from src.router.apiExtractText import router as apiExtract
 from src.router.apiAiChat import router as apiAiChat
+from src.router.apiURLDow import router as apiURLDow
 
 
 app = FastAPI()
@@ -15,6 +16,7 @@ setup_cors(app)
 
 app.include_router(apiExtract)
 app.include_router(apiAiChat)
+app.include_router(apiURLDow)
 
 # @app.get("/")
 # async def read_root():

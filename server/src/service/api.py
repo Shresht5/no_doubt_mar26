@@ -22,7 +22,7 @@ async def AIChatApi(req):
         "Authorization": f"Bearer {LLM_API_KEY}",
     }
 
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=60.0) as client:
         res = await client.post(url, json=payload, headers=headers)
 
     if res.status_code != 200:

@@ -3,7 +3,7 @@ from fastapi.concurrency import run_in_threadpool
 from src.controller.userController import get_users
 from src.utils.fileType import EXTRACTORS
 
-router=APIRouter(prefix="/api/extract")
+router=APIRouter(prefix="/api/extract",tags=["Extract"])
 
 @router.post("/")
 async def extract_text(file: UploadFile):

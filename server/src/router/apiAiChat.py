@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import Union, List, Literal
 from src.service.api import AIChatApi
 
-router=APIRouter(prefix="/api/aichat")
+router=APIRouter(prefix="/api/aichat",tags=["Chat"])
 
 class Message(BaseModel):
     role: Literal["user", "assistant", "system"]
