@@ -5,61 +5,17 @@ from fastapi.concurrency import run_in_threadpool
 from src.middleware.cors import setup_cors
 from src.utils.fileType import EXTRACTORS
 from src.service.api import AIChatApi
+from src.router.apiExtractText import router as apiExtract
+from src.router.apiAiChat import router as apiAiChat
+
 
 app = FastAPI()
 
 setup_cors(app)
 
-@app.post("/extract")
-async def extract_text(file: UploadFile):
-    # Get file extension
-    ext = "." + file.filename.split(".")[-1].lower()
-
-    extractor = EXTRACTORS.get(ext) 
-    if not extractor:
-        raise HTTPException(
-            status_code=415,
-            detail=f"Unsupported file type: {ext}"
-        )
-
-    # Read file into memory (no temp files)
-    data = await file.read()
-
-    # Run sync extractor in thread pool (keeps event loop free)
-    text = await run_in_threadpool(extractor, data)
-
-    return {
-        "filename": file.filename,
-        "characters": len(text),
-        "text": text
-    }
-
-class Message(BaseModel):
-    role: Literal["user", "assistant", "system"]
-    content: str
-
-class ChatRequest(BaseModel):
-    messages: List[Message]
-
-@app.post("/aichat")
-async def ai_chat(req:ChatRequest):
-    return await AIChatApi(req)
-
-# @app.post("/upload_file")
-# async def upload_file(file: UploadFile = File(...)):
-#     return {
-#         "filename": file.filename,
-#         "content_type": file.content_type
-#     }
+app.include_router(apiExtract)
+app.include_router(apiAiChat)
 
 # @app.get("/")
 # async def read_root():
 #     return {"Hello": "World"}
-
-# @app.post("/items/{item_id}")
-# def create_items(item_id:int,item:Item):
-#     return {"items_name":item.name,"item_id":item_id}
-
-# @app.get("/items/{item_id}")
-# def read_item(item_id: int, q: Union[str, None] = None):
-#     return {"item_id": item_id,"q": q}

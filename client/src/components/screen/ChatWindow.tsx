@@ -10,27 +10,6 @@ export default function ChatWindow({ chatId }: { chatId: string }) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const [chat, setChat] = useState([
-        { id: 1, user: "Person", message: "Hey, what is AI?" },
-        { id: 2, user: "AI", message: "AI stands for Artificial Intelligence." },
-
-        { id: 3, user: "Person", message: "Can it replace developers?" },
-        { id: 4, user: "AI", message: "It can assist, but not fully replace skilled developers." },
-
-        { id: 5, user: "Person", message: "What is Next.js?" },
-        { id: 6, user: "AI", message: "A React framework with routing and server-side features." },
-
-        { id: 7, user: "Person", message: "How to manage state in React?" },
-        { id: 8, user: "AI", message: "Using hooks like useState or useReducer." },
-
-        { id: 9, user: "Person", message: "What is API?" },
-        { id: 10, user: "AI", message: "API is a way for systems to communicate with each other." }
-    ]);
-
-    function addMessage(user: string, message: string) {
-        setChat(prev => [...prev, { id: chat.length + 1, user, message }]);
-    }
-
     function messageInput(input: string) {
         sendMessage(input)
     }
@@ -52,7 +31,7 @@ export default function ChatWindow({ chatId }: { chatId: string }) {
         setLoading(true);
 
         try {
-            const res = await fetch("http://localhost:8000/aichat", {
+            const res = await fetch("http://localhost:8000/api/aichat/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
