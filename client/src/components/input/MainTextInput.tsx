@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import FilePreview from '../section/FilePreview';
 import URLPreview from '../section/URLPreview';
+import GoogleAuth from '../section/GoogleAuth';
 
 export default function MainInput() {
 
@@ -44,14 +45,14 @@ export default function MainInput() {
         } else {
             setShowSubmit(true);
         }
-
     }, [value])
 
     return (
         <div>
             <video ref={videoRef} style={{ display: 'none' }} />
-            <h2>No_Doubt</h2>
 
+            <h2>No_Doubt</h2>
+            <GoogleAuth />
             <input type="text"
                 placeholder="URL..."
                 value={value.URL}
