@@ -7,6 +7,8 @@ from src.router.apiAiChat import router as apiAiChat
 from src.router.apiURLDow import router as apiURLDow
 from src.router.apiLogin import router as apiLogin
 from src.router.apiUsers import router as apiUser
+from src.router.apiChat import router as apiChat
+# from src.router.api import router as apiMessage
 from src.middleware.database import create_pool, close_pool,dbinit
 
 @asynccontextmanager
@@ -26,3 +28,5 @@ app.include_router(apiAiChat)
 app.include_router(apiURLDow)
 app.include_router(apiLogin)
 app.include_router(apiUser)
+app.include_router(apiChat)
+# app.include_router(apiMessage)

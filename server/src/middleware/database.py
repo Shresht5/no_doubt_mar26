@@ -32,6 +32,7 @@ async def dbinit():
         
         CREATE TABLE IF NOT EXISTS chats (
             id SERIAL PRIMARY KEY,
+            system_message TEXT NOT NULL,
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             created_at TIMESTAMPTZ DEFAULT NOW()
         );
