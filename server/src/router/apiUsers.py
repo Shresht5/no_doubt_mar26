@@ -9,8 +9,8 @@ router = APIRouter(prefix="/api/user",tags=["Users"])
 async def create_user(payload: UserCreate):
     async with get_conn() as conn:
         row = await conn.fetchrow(
-            "INSERT INTO users (name, email, picture) VALUES ($1, $2, $3) RETURNING id, name, picture, email",
-            payload.name, payload.email, payload.picture
+            "INSERT INTO users (name, email, picture, passw) VALUES ($1, $2, $3, $4) RETURNING id, name, picture, email,passw",
+            payload.name, payload.email, payload.picture, payload.passw
         )
     return dict(row)
 

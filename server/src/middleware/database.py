@@ -26,8 +26,24 @@ async def dbinit():
             id    SERIAL PRIMARY KEY,
             name  TEXT NOT NULL,
             picture  TEXT,
+            passw  TEXT,
             email TEXT UNIQUE NOT NULL
         );
+        
+        CREATE TABLE IF NOT EXISTS chats (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+                       
+        CREATE TABLE IF NOT EXISTS messages (
+            id SERIAL PRIMARY KEY,
+            chat_id INTEGER REFERENCES chats(id) ON DELETE CASCADE,
+            role SMALLINT NOT NULL, -- 0=user, 1=assistant
+            content TEXT NOT NULL,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+        
     """)
     await conn.close()
     print("Tables created.")
