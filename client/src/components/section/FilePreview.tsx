@@ -14,10 +14,11 @@ export default function FilePreview({ file }: { file: File }) {
     switch (fileType) {
         case 'video':
             return (
-                <div>
+                <div className='flex flex-col items-center'>
                     <video ref={videoRef} style={{ display: 'none' }} />
                     <video src={URL.createObjectURL(file)} controls width={200} />
                     <button
+                        className='cursor-pointer'
                         onClick={() => convertVideoToAudio({ file, videoRef, setProgress, setAudioUrl, setLoading })}
                         disabled={loading}
                     >
@@ -33,20 +34,26 @@ export default function FilePreview({ file }: { file: File }) {
             )
 
         case 'audio':
-            return <audio src={URL.createObjectURL(file)} controls />
+            return (
+                <div className='flex flex-col items-center'>
+                    <audio src={URL.createObjectURL(file)} controls />
+                </div>
+            )
 
         case 'image':
             return (
-                <img
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    width={200}
-                />
+                <div className='flex flex-col items-center'>
+                    <img
+                        src={URL.createObjectURL(file)}
+                        alt={file.name}
+                        width={200}
+                    />
+                </div>
             )
 
         case 'document':
             return (
-                <div>
+                <div className='flex flex-col items-center'>
                     <p>📄 {file.name}</p>
                     <p>{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
                 </div>
