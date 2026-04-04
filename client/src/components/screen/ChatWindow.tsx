@@ -1,60 +1,24 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ChatInput from '../input/ChatInput';
 import { Message } from '@/types/message';
+import { SendMessage } from '@/utils/api/SendMessage';
+import { FetchMessages } from '@/utils/api/FetchMessages';
 
 export default function ChatWindow({ chatId }: { chatId: string }) {
-
-    const messagesEndRef = useRef(null);
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(false);
 
     function messageInput(input: string) {
-        sendMessage(input)
+        SendMessage(input, chatId, messages, setLoading, setMessages)
     }
 
-    const sendMessage = async (input: string) => {
-        if (!input) return;
-        const newMessage: Message = { role: "user", content: input };
-        const updatedMessages: Message[] = [
-            {
-                role: "system",
-                content:
-                    "You are a concise AI assistant. Reply directly and briefly. Add extra points only if necessary. Avoid long explanations.",
-            },
-            ...messages,
-            newMessage,
-        ];
-        setMessages([...messages, newMessage]);
-        console.log(messages);
-        setLoading(true);
-
-        try {
-            const res = await fetch("http://localhost:8000/api/aichat/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    messages: updatedMessages,
-                }),
-            });
-
-            const data = await res.json();
-            console.log(data);
-            if (data?.error) {
-                setMessages(prev => [...prev, { role: "assistant", content: data.error.message }]);
-                return;
-            }
-            if (data.choices && data.choices.length > 0) {
-                const reply = data.choices[0].message;
-                setMessages([...messages, newMessage, { role: reply.role, content: reply.content }]);
-            }
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (chatId) {
+            FetchMessages(chatId, setMessages);
         }
-    };
+    }, [chatId]);
 
     return (
         <div className="w-[100vw] min-h-[100vh] ">
@@ -79,11 +43,11 @@ export default function ChatWindow({ chatId }: { chatId: string }) {
                         </div>
                     </div>
                 ))}
+                {loading && (<div>loading...</div>)}
                 <div>
                     <ChatInput addMessage={messageInput} />
                 </div>
             </div>
         </div>
-
     )
 }

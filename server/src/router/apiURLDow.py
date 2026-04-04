@@ -21,6 +21,8 @@ def download_video(url: str):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
             ext = info.get("ext", "webm")
+            title = info.get("title", "unknown")        
+            duration = info.get("duration", 0)  
 
         actual_path = f"{tmp_path}.{ext}"
 
@@ -28,7 +30,9 @@ def download_video(url: str):
             audio_bytes = f.read()
 
         text = extract_audio(audio_bytes, suffix=f".{ext}")
-        return {"transcript": text}
+        return { "filename": f"{title}.{ext}",             
+            "characters": len(text),                
+            "text": text } 
 
     finally:
         for path in [tmp_path, f"{tmp_path}.{ext}"]:

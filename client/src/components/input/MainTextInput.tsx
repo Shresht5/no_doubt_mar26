@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import FilePreview from '../section/FilePreview';
 import URLPreview from '../section/URLPreview';
-import GoogleAuth from '../section/GoogleAuth';
-
 export default function MainInput() {
 
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -18,6 +16,7 @@ export default function MainInput() {
         if ((value.URL && value.file) || (!value.URL && !value.file)) {
             return;
         }
+        let apidata;
         if (value.file) {
             const formData = new FormData();
             formData.append("file", value.file);
@@ -27,6 +26,8 @@ export default function MainInput() {
             });
             const data = await res.json();
             console.log(data);
+            apidata = data;
+
         }
         if (value.URL) {
             const res = await fetch(`http://localhost:8000/api/urldow/audiototext?url=${value.URL}`, {
@@ -34,11 +35,21 @@ export default function MainInput() {
             });
             const data = await res.json();
             console.log(data);
+            apidata = data;
         }
-        // router.push('/c/8454');
+        const res = await fetch("http://localhost:8000/api/chat/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                user_id: 1,
+                system_message: apidata.text
+            }),
+        });
+
+        const data = await res.json();
+        console.log(data);
+        router.push(`/c/${data.id}`);
     }
-
-
     useEffect(() => {
         if ((value.URL && value.file) || (!value.URL && !value.file)) {
             setShowSubmit(false);
@@ -50,9 +61,6 @@ export default function MainInput() {
     return (
         <div>
             <video ref={videoRef} style={{ display: 'none' }} />
-
-            <h2>No_Doubt</h2>
-            <GoogleAuth />
             <input type="text"
                 placeholder="URL..."
                 value={value.URL}
@@ -69,7 +77,6 @@ export default function MainInput() {
             {value.file ?
                 <FilePreview file={value.file} />
                 : (<p>No video selecteds</p>)}
-
 
             {/*inputText*/}
             <input type="text"
