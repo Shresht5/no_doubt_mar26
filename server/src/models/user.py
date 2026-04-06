@@ -13,3 +13,8 @@ class UserOut(BaseModel):
     email: str
     picture: Optional[str] = None
     passw: Optional[str] = None
+
+class AuthResponse(BaseModel):
+    user: UserOut
+    access_token: str
+    token_type: str

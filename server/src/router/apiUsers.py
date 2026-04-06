@@ -1,18 +1,29 @@
 from fastapi import APIRouter, HTTPException
 from src.middleware.database import get_conn
-from src.models.user import UserCreate, UserOut
+from src.models.user import UserCreate, UserOut, AuthResponse
+from src.utils.jwt import encodeJWT
 
 router = APIRouter(prefix="/api/user",tags=["Users"])
 
 # CREATE
-@router.post("/", response_model=UserOut, status_code=201)
+@router.post("/", response_model=AuthResponse, status_code=201)
 async def create_user(payload: UserCreate):
     async with get_conn() as conn:
-        row = await conn.fetchrow(
-            "INSERT INTO users (name, email, picture, passw) VALUES ($1, $2, $3, $4) RETURNING id, name, picture, email,passw",
-            payload.name, payload.email, payload.picture, payload.passw
-        )
-    return dict(row)
+        row = await conn.fetchrow("SELECT id, name, email, picture, passw FROM users WHERE email=$1", payload.email)
+        if not row:
+            row = await conn.fetchrow(
+                "INSERT INTO users (name, email, picture, passw) VALUES ($1, $2, $3, $4) RETURNING id, name, picture, email,passw",
+                payload.name, payload.email, payload.picture, payload.passw
+            )
+    user = dict(row)
+
+    token = encodeJWT(user["email"], user["id"])
+
+    return {
+        "user": user,
+        "access_token": token,
+        "token_type": "bearer"
+    }
 
 # READ ALL
 @router.get("/", response_model=list[UserOut])

@@ -140,7 +140,7 @@ export default function MainInput() {
             <div className="space-y-2">
                 <input
                     type="text"
-                    placeholder="Enter message..."
+                    placeholder=" (optional) Summarize, Roadmap, Example, insights..."
                     value={value.inputText}
                     onChange={(e) =>
                         setValue(prev => ({ ...prev, inputText: e.target.value }))

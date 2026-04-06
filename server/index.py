@@ -8,6 +8,7 @@ from src.router.apiURLDow import router as apiURLDow
 from src.router.apiLogin import router as apiLogin
 from src.router.apiUsers import router as apiUser
 from src.router.apiChat import router as apiChat
+from src.middleware.jwt import JWTMiddleware
 # from src.router.api import router as apiMessage
 from src.middleware.database import create_pool, close_pool,dbinit
 
@@ -22,6 +23,7 @@ app = FastAPI(lifespan=lifespan)
 
 setup_cors(app)
 add_session_middleware(app)
+app.add_middleware(JWTMiddleware)
 
 app.include_router(apiExtract)
 app.include_router(apiAiMessage)

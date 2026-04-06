@@ -1,4 +1,6 @@
-export default function HomeSlideMenu({ open, onClose }: { open: boolean, onClose: () => void }) {
+import { ReactNode } from "react";
+
+export default function HomeSlideMenu({ open, onClose, children }: { open: boolean, onClose: () => void, children: ReactNode }) {
     return (
         <div
             className={`fixed top-0 left-0 w-full h-full z-50 flex overflow-hidden
@@ -19,11 +21,7 @@ export default function HomeSlideMenu({ open, onClose }: { open: boolean, onClos
                 transform transition-transform duration-300 ease-in-out
                 ${open ? "translate-x-0" : "-translate-x-full"}`}
             >
-                <h4>home</h4>
-                <h4>chat</h4>
-                <h4>contact</h4>
-                <h4>about us</h4>
-                <h4>follow</h4>
+                {children}
             </div>
         </div>
     );
