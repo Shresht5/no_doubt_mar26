@@ -68,7 +68,7 @@ function drawRibbon(
     W: number,
     H: number
 ): void {
-    const STEPS = 80;
+    const STEPS = 100;
     const pts: Point[] = [];
 
     for (let i = 0; i <= STEPS; i++) {
@@ -191,21 +191,8 @@ export default function AuroraBorealisBackground({ children }: { children: React
     return (
         <div className="relative w-full min-h-screen overflow-hidden" style={{ background: "#010b14" }}>
             {/* Full-viewport canvas */}
-            <canvas
-                ref={canvasRef}
-                style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100vw",
-                    height: "100vh",
-                    zIndex: 0,
-                }}
-            />
-            {
-                children
-            }
-
+            <canvas ref={canvasRef} className="fixed top-0 left-0 w-screen h-screen z-0 pointer-events-none" />
+            {children}
         </div>
     );
 }

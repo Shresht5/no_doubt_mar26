@@ -57,7 +57,7 @@ export default function ChatInput({ addMessage }: Props) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
     return (
-        <div className={`fixed bottom-0 left-0 w-full z-50 transition-transform duration-300 
+        <div className={`fixed bottom-4 left-0 w-full transition-transform duration-300 
                 ${ShowInput ? "translate-y-0" : "translate-y-full"}`}>
 
             <div className='p-2 px-3'>

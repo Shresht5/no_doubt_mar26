@@ -24,6 +24,7 @@ export default function HomeNavBar({ heading, children }: { heading: string, chi
     }, [])
     const signout = () => {
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         setPicture("");
         setProfile(false);
     }
@@ -49,14 +50,18 @@ export default function HomeNavBar({ heading, children }: { heading: string, chi
             <div className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 
                 ${showNav ? "translate-y-0" : "-translate-y-full"}`}>
 
-                <div className='flex justify-between items-center p-2 px-4 bg-gray-900'>
+                <div className='flex justify-between items-center p-2 px-4 bg-[rgba(50,50,50,0.3)]'>
                     <div className='flex items-center space-x-2'>
                         <div onClick={() => setSlideMenu(true)} className="cursor-pointer">
                             <svg className='h-7 fill-white' viewBox="0 0 640 640">
                                 <path d="M96 160C96 142.3 110.3 128 128 128L512 128C529.7 128 544 142.3 544 160C544 177.7 529.7 192 512 192L128 192C110.3 192 96 177.7 96 160zM96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320zM544 480C544 497.7 529.7 512 512 512L128 512C110.3 512 96 497.7 96 480C96 462.3 110.3 448 128 448L512 448C529.7 448 544 462.3 544 480z" />
                             </svg>
                         </div>
-                        <div className='text-2xl truncate max-w-[200px]'>{heading}</div>
+                        <em className=" italic font-bold bg-gradient-to-br from-cyan-700 via-sky-300 to-blue-600 bg-clip-text text-transparent font-serif">
+                            <div className='text-2xl truncate max-w-[200px]'>
+                                {heading}
+                            </div>
+                        </em>
                     </div>
                     <div className='flex items-center' aria-label='logout'>
                         {profile ?

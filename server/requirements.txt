@@ -11,3 +11,4 @@ authlib
 asyncpg
 itsdangerous
 python-jose
+passlib

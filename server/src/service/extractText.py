@@ -64,7 +64,8 @@ def extract_audio(data: bytes,suffix: str = ".webm") -> str:
         tmp_path = tmp.name
 
     try:
-        segments, _ = whisper_model.transcribe(tmp_path, beam_size=1)
+        translate=True
+        segments, _ = whisper_model.transcribe(tmp_path, beam_size=1,task="translate" if translate else "transcribe")
         return " ".join(segment.text for segment in segments)
     finally:
         os.remove(tmp_path)

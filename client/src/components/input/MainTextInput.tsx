@@ -9,7 +9,7 @@ export default function MainInput() {
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const router = useRouter();
-
+    const [loading, setLoading] = useState(false)
     const [showSubmit, setShowSubmit] = useState(false);
     const [value, setValue] = useState<InputState>({ URL: "", inputText: "", file: null, });
     async function submit() {
@@ -17,6 +17,7 @@ export default function MainInput() {
             return;
         }
         let apidata;
+        setLoading(true);
         if (value.file) {
             const formData = new FormData();
             formData.append("file", value.file);
@@ -37,17 +38,24 @@ export default function MainInput() {
             console.log(data);
             apidata = data;
         }
+        const user = localStorage.getItem("user")
+        let user_id;
+        if (user) {
+            user_id = JSON.parse(user);
+            user_id = user_id.id
+        }
         const res = await fetch("http://localhost:8000/api/chat/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                user_id: 1,
+                user_id,
                 system_message: apidata.text
             }),
         });
 
         const data = await res.json();
         console.log(data);
+        setLoading(false);
         router.push(`/c/${data.id}`);
     }
     useEffect(() => {
@@ -151,7 +159,7 @@ export default function MainInput() {
                     <p className="text-sm text-gray-300 truncate">{value.inputText}</p>
                 )}
             </div>
-
+            {loading && (<h4>loading....</h4>)}
             {/* Submit */}
             {showSubmit && (
                 <button

@@ -1,18 +1,26 @@
+'use client'
+import { useState } from "react";
+
 export default function RenderMessage({ content }: { content: string }) {
+
+    const MAX_LENGTH = 300; // adjust
+
+    const [expanded, setExpanded] = useState(false);
+
+    const isLong = content.length > MAX_LENGTH;
+    const finalContent = expanded || !isLong
+        ? content
+        : content.slice(0, MAX_LENGTH) + "...";
 
     function formatMessage(content: string) {
         return content
-            // convert **bold** → section title
             .replace(/\*\*(.*?)\*\*/g, "\n## $1\n")
-
-            // convert * bullets → lines
             .replace(/\* /g, "\n- ")
-
-            // spacing cleanup
             .replace(/\n{2,}/g, "\n\n")
             .trim();
     }
-    const lines = formatMessage(content).split("\n");
+
+    const lines = formatMessage(finalContent).split("\n");
 
     return (
         <div className="text-sm">
@@ -33,8 +41,19 @@ export default function RenderMessage({ content }: { content: string }) {
                         </div>
                     );
                 }
+
                 return <div key={i}>{line}</div>;
             })}
+
+            {/* ✅ Toggle */}
+            {isLong && (
+                <button
+                    onClick={() => setExpanded(!expanded)}
+                    className="text-green-300 text-xs mt-2 cursor-pointer"
+                >
+                    {expanded ? "< Show less " : "Show more >"}
+                </button>
+            )}
         </div>
     );
 }

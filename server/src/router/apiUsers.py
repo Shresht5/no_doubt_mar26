@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from src.middleware.database import get_conn
 from src.models.user import UserCreate, UserOut, AuthResponse
 from src.utils.jwt import encodeJWT
+from src.utils.hashPass import hash_password
 
 router = APIRouter(prefix="/api/user",tags=["Users"])
 
