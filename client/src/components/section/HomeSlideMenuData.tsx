@@ -1,8 +1,10 @@
 'use client'
+import { useToast } from '@/hook/ToastContext';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 
 export default function HomeSlideMenuData() {
+    const { addToast } = useToast();
     const [chats, setChat] = useState<any[]>([]);
     async function fetchChat() {
         const user = localStorage.getItem("user")
@@ -31,6 +33,9 @@ export default function HomeSlideMenuData() {
                     <h4>No_Doubt</h4>
                 </div>
             </Link>
+            <button onClick={() => addToast("Success is everything", 'green')}>toast</button>
+            <button onClick={() => addToast("Error", 'red')}>toast</button>
+            <button onClick={() => addToast("message", 'blue')}>toast</button>
             <div className='w-full flex-1'>
                 {chats && chats.map((data, i) => (
                     <Link href={`/c/${data.id}`} key={i}>

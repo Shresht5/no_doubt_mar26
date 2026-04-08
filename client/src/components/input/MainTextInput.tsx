@@ -11,7 +11,7 @@ export default function MainInput() {
     const router = useRouter();
     const [loading, setLoading] = useState(false)
     const [showSubmit, setShowSubmit] = useState(false);
-    const [value, setValue] = useState<InputState>({ URL: "", inputText: "", file: null, });
+    const [value, setValue] = useState<InputState>({ URL: "", file: null, });
     async function submit() {
         if ((value.URL && value.file) || (!value.URL && !value.file)) {
             return;
@@ -91,7 +91,7 @@ export default function MainInput() {
             <div className="space-y-2">
                 {!value.file ? (
                     // DROP ZONE
-                    <label className="w-full h-[200px] border border-gray-400 rounded-lg  bg-white/10 flex flex-col justify-center items-center  text-gray-300 cursor-pointer hover:border-white      transition relative overflow-hidden">
+                    <label className="w-full h-50 border border-gray-400 rounded-lg  bg-white/10 flex flex-col justify-center items-center  text-gray-300 cursor-pointer hover:border-white      transition relative overflow-hidden">
 
                         <input
                             type="file"
@@ -110,7 +110,7 @@ export default function MainInput() {
 
                 ) : (
                     // FILE SELECTED VIEW
-                    <div className="w-full h-[200px] border border-gray-400 rounded-lg   bg-white/10 flex flex-col justify-between p-4">
+                    <div className="w-full h-50 border border-gray-400 rounded-lg   bg-white/10 flex flex-col justify-between p-4">
 
                         {/* File Info */}
                         <div className="space-y-1">
@@ -144,21 +144,6 @@ export default function MainInput() {
                 )}
             </div>
 
-            {/* Text input */}
-            <div className="space-y-2">
-                <input
-                    type="text"
-                    placeholder=" (optional) Summarize, Roadmap, Example, insights..."
-                    value={value.inputText}
-                    onChange={(e) =>
-                        setValue(prev => ({ ...prev, inputText: e.target.value }))
-                    }
-                    className="w-full p-3 border border-gray-400 rounded-lg bg-white/10 text-white outline-none focus:border-white"
-                />
-                {value.inputText && (
-                    <p className="text-sm text-gray-300 truncate">{value.inputText}</p>
-                )}
-            </div>
             {loading && (<h4>loading....</h4>)}
             {/* Submit */}
             {showSubmit && (

@@ -1,24 +1,15 @@
 'use client'
-import { InputState } from '@/types/inputSection';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react'
 
-type Props = {
-    addMessage: Function
-}
 
-export default function ChatInput({ addMessage }: Props) {
-    const router = useRouter();
-    const [value, setValue] = useState<InputState>({
-        URL: "",
-        inputText: "",
-        file: null,
-    });
+export default function ChatInput({ addMessage }: { addMessage: Function }) {
+    const [input, setInput] = useState('');
     const [ShowInput, setShowInput] = useState(true);
     const inputarea = useRef<HTMLTextAreaElement>(null);
 
     const handleChange = (e: any) => {
-        setValue((prev) => ({ ...prev, inputText: e.target.value }));
+        setInput(e.target.value);
         if (!inputarea.current) return;
         inputarea.current.style.height = "auto";
         inputarea.current.style.height = inputarea.current.scrollHeight + "px";
@@ -37,9 +28,9 @@ export default function ChatInput({ addMessage }: Props) {
 
     function submit(e: any) {
         e.preventDefault()
-        if (!value.inputText.trim()) return;
-        addMessage(value.inputText.trim());
-        setValue((prev) => ({ ...prev, inputText: "" }));
+        if (!input.trim()) return;
+        addMessage(input.trim());
+        setInput("");
     }
     useEffect(() => {
         let lastScrollY = window.scrollY;
@@ -64,7 +55,7 @@ export default function ChatInput({ addMessage }: Props) {
                 <form onSubmit={submit} className="px-3 p-2 border-0  rounded-3xl  bg-[#282638]  flex items-center">
                     <textarea ref={inputarea}
                         className="p-1 outline-0 text-white flex-1 resize-none overflow-y-auto max-h-26  custom-scroll"
-                        value={value.inputText}
+                        value={input}
                         onChange={(e) => { handleChange(e); }}
                         onKeyDown={handleKeyDown}
                         placeholder="Type your message..." />
