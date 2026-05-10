@@ -1,7 +1,7 @@
 import MainTextInput from "@/components/input/MainTextInput";
 import HomeSlideMenu from "@/components/menu/HomeSlideMenu";
 import AbyssCanvas from "@/components/screen/AbyssCanvas";
-import HomeNavBar from "@/components/navbar/HomeNavBar";
+import HomeNavBar from "@/components/navbar/NavBar";
 import HomeSlideMenuData from "@/components/section/HomeSlideMenuData";
 
 export default function Home() {

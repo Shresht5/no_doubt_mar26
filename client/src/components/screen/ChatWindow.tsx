@@ -5,7 +5,7 @@ import { Message } from '@/types/message';
 import { SendMessage } from '@/utils/api/SendMessage';
 import { FetchMessages } from '@/utils/api/FetchMessages';
 import { FetchSystemMessages } from '@/utils/api/FetchSystemMessage';
-import HomeNavBar from '../navbar/HomeNavBar';
+import HomeNavBar from '../navbar/NavBar';
 import RenderMessage from '../section/RenderMessage';
 import AroraCanvas from "@/components/screen/AroraCavas";
 import HomeSlideMenuData from '../section/HomeSlideMenuData';

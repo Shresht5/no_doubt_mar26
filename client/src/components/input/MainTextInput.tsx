@@ -1,8 +1,7 @@
 'use client'
 import { InputState } from '@/types/inputSection';
-import { convertVideoToAudio } from '@/utils/MediaProcessing';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import FilePreview from '../section/FilePreview';
 import URLPreview from '../section/URLPreview';
 export default function MainInput() {
@@ -75,15 +74,12 @@ export default function MainInput() {
             {/* URL input */}
             <div className="space-y-2">
                 <input
-                    className="w-full p-3 border border-gray-400 rounded-lg bg-white/10 text-white outline-none focus:border-white"
+                    className="w-full p-3 border border-gray-400 rounded-lg bg-white/10 text-gray-400 outline-none focus:border-white"
                     type="text"
                     placeholder="Paste your link..."
                     value={value.URL}
                     onChange={(e) => setValue(prev => ({ ...prev, URL: e.target.value }))}
                 />
-                {value.URL && (
-                    <p className="text-sm text-gray-300 truncate">Url: {value.URL}</p>
-                )}
                 <URLPreview value={value} />
             </div>
 
@@ -91,8 +87,7 @@ export default function MainInput() {
             <div className="space-y-2">
                 {!value.file ? (
                     // DROP ZONE
-                    <label className="w-full h-50 border border-gray-400 rounded-lg  bg-white/10 flex flex-col justify-center items-center  text-gray-300 cursor-pointer hover:border-white      transition relative overflow-hidden">
-
+                    <label className="w-full h-50 border border-gray-400 rounded-lg  bg-white/10 flex flex-col justify-center items-center  text-gray-300 cursor-pointer hover:border-gray-700 transition relative overflow-hidden">
                         <input
                             type="file"
                             className="absolute inset-0 opacity-0 cursor-pointer"
@@ -125,7 +120,7 @@ export default function MainInput() {
                         <div className="flex justify-between items-center">
                             <button
                                 onClick={() => setValue(prev => ({ ...prev, file: null }))}
-                                className="text-sm px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
+                                className="text-sm px-3 py-1 rounded bg-gray-400 hover:bg-red-600 text-white"
                             >
                                 Remove
                             </button>

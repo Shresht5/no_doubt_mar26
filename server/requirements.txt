@@ -12,3 +12,4 @@ asyncpg
 itsdangerous
 python-jose
 passlib
+razorpay
