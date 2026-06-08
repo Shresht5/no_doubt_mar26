@@ -69,8 +69,16 @@ It serves as a reference implementation for developers who need to understand ho
 ```bash
 # Install frontend dependencies
 cd client && npm install
+# Run as dev
+npm run dev
+
+# Backend Virtual Environment
+python -m venv venv
+venv\Scripts\activate
 # Install backend dependencies
-cd ../server && pip install -r requirements.txt
+cd server && pip install -r requirements.txt
+# Run as dev
+uvicorn index:app --reload
 ```
 
 ### Verify It's Working
