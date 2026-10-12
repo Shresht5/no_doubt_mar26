@@ -1,4 +1,5 @@
 fastapi[standard]
+av==14.2.0
 python-multipart 
 PyMuPDF 
 python-docx 
@@ -13,3 +14,4 @@ itsdangerous
 python-jose
 passlib
 razorpay
+faster-whisper

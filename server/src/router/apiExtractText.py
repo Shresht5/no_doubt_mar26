@@ -1,6 +1,5 @@
 from fastapi import APIRouter,UploadFile, HTTPException
 from fastapi.concurrency import run_in_threadpool
-from src.controller.userController import get_users
 from src.utils.fileType import EXTRACTORS
 
 router=APIRouter(prefix="/api/extract",tags=["Extract"])
@@ -28,7 +27,3 @@ async def extract_text(file: UploadFile):
         "characters": len(text),
         "text": text
     }
-
-@router.get("/user")
-async def read_users():
-    return await get_users()
