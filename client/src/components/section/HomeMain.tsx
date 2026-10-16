@@ -1,6 +1,8 @@
 import MainInput from "@/components/input/MainTextInput";
 import Link from "next/link";
 import SignupButton from "../button/SignupButton";
+import HomeNavBar from "../navbar/NavBar";
+import HomeSlideMenuData from "./HomeSlideMenuData";
 
 /* ─── tiny animated grid bg ─────────────────────────────────────── */
 function GridBg() {
@@ -76,8 +78,12 @@ export default function Page() {
       style={{ fontFamily: "'DM Sans', 'Lato', sans-serif" }}
     >
       <GridBg />
-
-      <nav className="sticky top-0 z-40 flex items-center justify-between px-6 sm:px-10 py-4 bg-[#f5f3ee]/80 backdrop-blur-md border-b border-[#d6cfbf]">
+      <div className="relative z-10">
+        <HomeNavBar heading="No doubt" colour="black">
+          <HomeSlideMenuData />
+        </HomeNavBar>
+      </div>
+      {/* <nav className="sticky top-0 z-40 flex items-center justify-between px-6 sm:px-10 py-4 bg-[#f5f3ee]/80 backdrop-blur-md border-b border-[#d6cfbf]">
         <div className="flex items-center gap-2">
           <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
             <rect width="26" height="26" rx="7" fill="#2e2a22" />
@@ -115,7 +121,7 @@ export default function Page() {
           </a>
           <SignupButton />
         </div>
-      </nav>
+      </nav> */}
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section className="flex flex-col items-center text-center px-4 pt-20 pb-10">

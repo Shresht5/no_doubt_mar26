@@ -54,9 +54,10 @@ async def get_chat(chat_id: int):
     return dict(row)
 
 # DELETE
-@router.delete("/{chat_id}", status_code=204)
+@router.delete("/{chat_id}", status_code=200)
 async def delete_chat(chat_id: int):
     async with get_conn() as conn:
         result = await conn.execute("DELETE FROM chats WHERE id = $1", chat_id)
     if result == "DELETE 0":
         raise HTTPException(status_code=404, detail="Chat not found")
+    return dict({"message":"chat deleted","result":result})
